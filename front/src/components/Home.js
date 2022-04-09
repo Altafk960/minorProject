@@ -3,7 +3,9 @@ import ipfs from "../ipfs";
 import classes from "./Home.module.css";
 
 const Home = () => {
-  const [buffer, setBuffer] = useState("");
+    const [buffer, setBuffer] = useState("");
+    
+    // THIS PART REQUIRE ATTENTION 
 
     const fileSubmitHandler = (event) => {
       event.preventDefault();
