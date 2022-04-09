@@ -1,0 +1,100 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import classes from "./Login.module.css";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+const Login = () => {
+  const [emailInput, setEmailInput] = useState("");
+  const [emailFocus, setEmailFocus] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordFocus, setPasswordFocus] = useState(false);
+  let navigate = useNavigate();
+
+  const emailInputHandler = (e) => {
+    setEmailInput(e.target.value);
+  };
+
+  const emailFocusHandler = (e) => {
+    setEmailFocus(true);
+  };
+
+  const emailBlurHandler = (e) => {
+    setEmailFocus(false);
+  };
+
+  const passwordInputHandler = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const passwordFocusHandler = (e) => {
+    setPasswordFocus(true);
+  };
+  const passwordBlurHandler = (e) => {
+    setPasswordFocus(false);
+  };
+
+  let activeEmailClassName = "";
+  let activePasswordClassName = "";
+  if (emailInput.length > 0 || emailFocus) {
+    activeEmailClassName = "active";
+  }
+
+  if (password.length > 0 || passwordFocus) {
+    activePasswordClassName = "active";
+  }
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:3001/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: emailInput,
+        password: password,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+    const response = await res.json();
+    console.log(response.message);
+
+    if (response.message === "LOGIN_SUCCESSFUL") {
+      navigate("/home");
+    }
+  };
+
+  return (
+    <div className={classes.loginForm}>
+      <form onSubmit={submitHandler}>
+        <div className={` ${classes.formControl}`}>
+          <label className={classes[activeEmailClassName]}>Email</label>
+          <input
+            type="email"
+            name="email"
+            onChange={emailInputHandler}
+            onFocus={emailFocusHandler}
+            onBlur={emailBlurHandler}
+          ></input>
+        </div>
+
+        <div className={classes.formControl}>
+          <label className={classes[activePasswordClassName]}>Password</label>
+          <input
+            type="password"
+            name="password"
+            onChange={passwordInputHandler}
+            onFocus={passwordFocusHandler}
+            onBlur={passwordBlurHandler}
+          ></input>
+        </div>
+
+        <button type="submit">Login</button>
+        <p>
+          Doesn't have an account
+          <Link to="/signup">Signup here</Link>
+        </p>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
