@@ -4,59 +4,72 @@ import ipfs from "../ipfs";
 import classes from "./Home.module.css";
 import Meme from '../abis/Meme.json';
 
-const Home = () => {
+const Home =  () => {
+
   const [buffer, setBuffer] = useState("");
   const [memeHash, setMemeHash] = useState("");
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
-  const [web3, setWeb3] = useState(null);
 
 
   useEffect(() => {
-    loadWeb3();
-    loadBlockchainData();
-  });
+    async function load() {
+      const web3 = new Web3(Web3.givenProvider || "http://localhost:7545");
+      const accounts = await web3.eth.requestAccounts();
+      setAccount(accounts[0]);
+      console.log(accounts);
 
-  async function loadWeb3() {
-    if (window.ethereum) {
-      window.web3 = new Web3(window.ethereum)
-      await window.ethereum.enable()
+        const networkId = await web3.eth.net.getId();
+         console.log(networkId);
+         const networkData = Meme.networks[networkId];
+         console.log(networkData);
+         if (networkData) {
+           const contract = new web3.eth.Contract(Meme.abi, networkData.address);
+           // this.setState({ contract })
+           setContract(contract);
+        //   console.log(contract);
+           const memeHash = await contract.methods.get().call();
+           setMemeHash(memeHash);
+           console.log(memeHash);
+         } else {
+           window.alert("Smart contract not deployed to detected network.");
+       }
     }
-    else if (window.web3) {
-      window.web3 = new Web3(window.web3.currentProvider)
-    }
-    else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-    }
-  }
+    load();
+  },[]);
+   
 
-  async function loadBlockchainData() {
-    const web3 = window.web3
-    // Load account
-    const accounts = await web3.eth.getAccounts()
-    // this.setState({ account: accounts[0] })
-    setAccount(accounts[0]);
-    const networkId = await web3.eth.net.getId()
-    const networkData = Meme.networks[networkId]
-    if(networkData) {
-      const contract = new web3.eth.Contract(Meme.abi, networkData.address)
-      // this.setState({ contract })
-      setContract(contract);
-      const memeHash = await contract.methods.get().call()
-      setMemeHash(memeHash);
-    } else {
-      window.alert('Smart contract not deployed to detected network.')
-    }
-  }
+
+  // async function loadWeb3() {
+  //   if (window.ethereum) {
+  //     window.web3 = new Web3(window.ethereum)
+  //     await window.ethereum.enable();
+  //   }
+  //   else if (window.web3) {
+  //     window.web3 = new Web3(window.web3.currentProvider)
+  //   }
+  //   else {
+  //     window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+  //   }
+  // }
+
+ 
 
   // THIS PART REQUIRE ATTENTION
 
   const fileSubmitHandler =async (event) => {
     event.preventDefault();
-    const res = await ipfs.add(buffer)
-    console.log(res.path);
-    ;
-  };
+    const result = await ipfs.add(buffer);
+    console.log(result);
+   contract.methods
+     .set(result.path)
+     .send({ from: account })
+     .then((r) => {
+       setMemeHash(result.path);
+     });
+};
+    
+
 
   const captureFile = (event) => {
     event.preventDefault();
