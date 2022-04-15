@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Web3 from 'web3';
+import Web3 from "web3";
 import ipfs from "../ipfs";
 import classes from "./Home.module.css";
-import Meme from '../abis/Meme.json';
+import Meme from "../abis/Meme.json";
 
-const Home =  () => {
-
+const Home = () => {
   const [buffer, setBuffer] = useState("");
+  const [fileName, setFileName] = useState("");
   const [memeHash, setMemeHash] = useState("");
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
-
 
   useEffect(() => {
     async function load() {
@@ -18,69 +17,73 @@ const Home =  () => {
       const accounts = await web3.eth.requestAccounts();
       setAccount(accounts[0]);
       console.log(accounts);
-
-        const networkId = await web3.eth.net.getId();
-         console.log(networkId);
-         const networkData = Meme.networks[networkId];
-         console.log(networkData);
-         if (networkData) {
-           const contract = new web3.eth.Contract(Meme.abi, networkData.address);
-           // this.setState({ contract })
-           setContract(contract);
-        //   console.log(contract);
-           const memeHash = await contract.methods.get().call();
-           setMemeHash(memeHash);
-           console.log(memeHash);
-         } else {
-           window.alert("Smart contract not deployed to detected network.");
-       }
+      const networkId = await web3.eth.net.getId();
+      console.log(networkId);
+      const networkData = Meme.networks[networkId];
+      console.log(networkData);
+      if (networkData) {
+        const contract = new web3.eth.Contract(Meme.abi, networkData.address);
+        setContract(contract);
+        const memeHash = await contract.methods.get().call();
+        setMemeHash(memeHash);
+        console.log(memeHash);
+      } else {
+        window.alert("Smart contract not deployed to detected network.");
+      }
     }
     load();
-  },[]);
-   
+  }, []);
 
-
-  // async function loadWeb3() {
-  //   if (window.ethereum) {
-  //     window.web3 = new Web3(window.ethereum)
-  //     await window.ethereum.enable();
-  //   }
-  //   else if (window.web3) {
-  //     window.web3 = new Web3(window.web3.currentProvider)
-  //   }
-  //   else {
-  //     window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
-  //   }
-  // }
-
- 
-
-  // THIS PART REQUIRE ATTENTION
-
-  const fileSubmitHandler =async (event) => {
+  const fileSubmitHandler = async (event) => {
     event.preventDefault();
     const result = await ipfs.add(buffer);
     console.log(result);
-   contract.methods
-     .set(result.path)
-     .send({ from: account })
-     .then((r) => {
-       setMemeHash(result.path);
-     });
-};
+    contract.methods
+      .set(result.path)
+      .send({ from: account })
+      .then((r) => {
+        setMemeHash(result.path);
+      });
     
+    
+    console.log(fileName);
+    console.log(memeHash);
+    
+    // console.log(localStorage.getItem("user"));
 
+    // console.log(body);
+     
+    fetch("http://localhost:8080/myUploads", {
+      method: "POST",
+      body: JSON.stringify({
+      fileName: fileName,
+      hash: memeHash,
+      userId: localStorage.getItem("user"),
+    }),
+      headers: {
+        "Authorization": localStorage.getItem("token"),
+        "Content-Type": "application/json"
+      }
+    }).then(res => {
+      console.log(res);
+    })
+   
+    
+  };
 
   const captureFile = (event) => {
     event.preventDefault();
+  
+    const fileName = event.target.files[0].name;
     const file = event.target.files[0];
+    
     const reader = new window.FileReader();
-
     reader.readAsArrayBuffer(file);
     reader.onloadend = () => {
       console.log(reader.result);
       const buff = new Uint8Array(reader.result);
       setBuffer(buff);
+      setFileName(fileName);
     };
   };
 

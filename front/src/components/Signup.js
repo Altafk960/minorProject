@@ -64,7 +64,7 @@ const Signup = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:3001/signup", {
+    const res = await fetch("http://localhost:8080/signup", {
       method: "POST",
       body: JSON.stringify({
         email: email,
@@ -74,10 +74,10 @@ const Signup = () => {
       headers: { "Content-Type": "application/json" },
     });
 
-    console.log(res);
+  //  console.log(res);
 
     const response = await res.json();
-    console.log(response.message);
+  //  console.log(response.message);
     if (response.message === "SIGNUP_SUCCESSFUL") {
       navigate('/login');
     }

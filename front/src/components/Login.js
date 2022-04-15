@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import classes from "./Login.module.css";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import  { loginActions } from "./store/store";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [emailInput, setEmailInput] = useState("");
   const [emailFocus, setEmailFocus] = useState(false);
   const [password, setPassword] = useState("");
@@ -46,7 +49,7 @@ const Login = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:3001/login", {
+    const res = await fetch("http://localhost:8080/login", {
       method: "POST",
       body: JSON.stringify({
         email: emailInput,
@@ -55,9 +58,14 @@ const Login = () => {
       headers: { "Content-Type": "application/json" },
     });
     const response = await res.json();
-    console.log(response.message);
+   // console.log(response);
 
     if (response.message === "LOGIN_SUCCESSFUL") {
+      dispatch(loginActions.onLogin());
+      localStorage.setItem("token", response.user.token)
+      localStorage.setItem("user", response.user.userId);
+      // console.log(response.user.token);
+      // console.log(localStorage.getItem("user"));
       navigate("/home");
     }
   };

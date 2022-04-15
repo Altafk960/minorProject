@@ -1,0 +1,32 @@
+.contentCard{
+    width:80%;
+    margin:2rem auto;
+    background-color:white;
+    padding:0.5rem;
+    border-radius:5px;
+    border:1px solid purple;
+    display: flex;
+    flex-direction:row;
+}
+
+.userDetails{
+    font-size:1.2rem;
+    color:grey;
+    font-weight:bold;
+}
+
+.fileDetails{
+    font-size: 1.5rem;
+}
+
+.fileDetails{
+    flex:1;
+}
+
+.download{
+    flex:1;
+    text-align: right;
+    justify-content: center;
+    align-items: center;
+}
+
