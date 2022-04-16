@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/user');
+const uploadRoutes = require('./routes/upload');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(bodyParser.json({ extended: true }));
 
 app.use(userRoutes);
+app.use(uploadRoutes);
 
 
 mongoose.connect(
@@ -27,4 +29,4 @@ mongoose.connect(
     console.log(err);
 });
 
-app.listen(3001);
+app.listen(8080);

@@ -17,7 +17,6 @@ const MyUploads = () => {
       });
   }, []);
 
-  console.log(uploads);
 
   return (
     <>
@@ -27,7 +26,7 @@ const MyUploads = () => {
       <Card>
         {uploads.length > 0 &&
           uploads.map((upload) => {
-            return <UploadContent key={upload._id} name={upload.fileName} hash={upload.hash} date={upload.date} userId={upload.userId}></UploadContent>;
+            return <UploadContent key={upload._id} name={upload.fileName} hash={upload.hash} date={upload.date} userId={upload.userId} mimeType={upload.fileType}></UploadContent>;
           })}
         {uploads.length === 0 && <p>do not exist</p>}
       </Card>

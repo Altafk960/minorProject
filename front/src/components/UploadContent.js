@@ -1,18 +1,53 @@
-import classes from './UploadContent.module.css';
-import { saveAs } from 'file-saver';
+import classes from "./UploadContent.module.css";
+import { saveAs } from "file-saver";
+// const fs = require("fs");
+const {  decrypt } = require('./crypto');
 
-const UploadContent = (props) => {
+function UploadContent(props) {
+
 
   const url = `https://ipfs.infura.io/ipfs/${props.hash}`;
   const fileName = props.name;
-  // var month = props.date.getMonth() + 1; //months from 1-12
-  // var day = props.date.getDate();
-  //   var year = props.date.getFullYear();
-    
-  //   var newDate = day + "/" + month + "/" + year;
+  const mimeType = props.mimeType;
 
-  const saveFile = () => {
-    saveAs(url, fileName);
+  const downloadURL = (data, fileName) => {
+    const a = document.createElement("a");
+    a.href = data;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.style.display = "none";
+    a.click();
+    a.remove();
+  };
+
+  const downloadBlob = (data, fileName, mimeType) => {
+    const blob = new Blob([data], {
+      type: mimeType,
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    downloadURL(url, fileName);
+
+    setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+  };
+
+
+
+
+
+  const saveFile = async () => {
+    console.log(props.hash);
+    const res = await fetch(url);
+    console.log(res);
+    const response = await res.text();
+    // console.log(response);
+   //   const buff = await response.arrayBuffer();
+    console.log(response.length);
+  //   console.log(response);
+   // saveAs(url, fileName);
+    const text = decrypt(response);
+    downloadBlob(text, fileName, mimeType);
   };
 
   return (
