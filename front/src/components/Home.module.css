@@ -1,6 +1,32 @@
 .fileForm{
-    width: 50vw;
-  margin: 0 auto;
-  padding:10rem;
+  background-color: #091e2b;
+    width: 40vw;
+  margin:  30vh auto;
+  padding:5rem;
   text-align:center;
+  border-radius:1vw;
+  border:1px solid purple;
+}
+.bgImg{
+  background-color:#152733;
+  background-size: cover;
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  height: 100vh;
+  
+}
+.text{
+  color: white;
+  margin: 1rem 0 3rem 0;
+  font-size: 1.7rem;
+  /* background-color: purple; */
+}
+.btnUpload{
+  padding: 0.8rem 2.5rem;
+  background-color: #0093FF;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  color: white;
+  /* margin: 0 2rem; */
+  font-size: 1.4rem;
 }

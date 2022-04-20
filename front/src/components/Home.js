@@ -3,6 +3,8 @@ import Web3 from "web3";
 import ipfs from "../ipfs";
 import classes from "./Home.module.css";
 import Meme from "../abis/Meme.json";
+import NavBar from './NavBar';
+
 //const encrypt = require("../encryption/encrypt");
 const { encrypt, decrypt } = require("./crypto");
 const Home = () => {
@@ -108,15 +110,16 @@ const Home = () => {
   };
 
   return (
-    <>
+    <div className={classes.bgImg}>
+      <NavBar></NavBar>
       <div className={classes.fileForm}>
         <form onSubmit={fileSubmitHandler} encType="multipart/form-data">
-          <label> Upload your file</label>
-          <input type="file" onChange={captureFile}></input>
-          <button type="submit">Upload</button>
+          <label > Upload your file</label>
+          <input className={classes.text} type="file" onChange={captureFile}></input>
+          <button className={classes.btnUpload} type="submit">Upload</button>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -51,20 +51,26 @@ function UploadContent(props) {
   };
 
   return (
-    <div className={classes.contentCard}>
-      <div className={classes.fileDetails}>
-        <div className={classes.userDetails}>
-          <p>
-            posted by {props.userId} on {props.date}
-          </p>{" "}
-        </div>
-        <div className={classes.fileName}>
-          <h2>{props.name}</h2>
-        </div>
-      </div>
+    <div >
+      <div className={classes.contentCard}>
+        <div className={classes.fileDetails}>
 
-      <div className={classes.download}>
-        <button onClick={saveFile}>Download File</button>
+          
+
+          <div className={classes.fileName}>
+            <h2>{props.name}</h2>
+          </div>
+          <div className={classes.userDetails}>
+            <p>
+              Posted by: {props.userId}
+            </p>
+            <p> Date: {props.date}</p>{" "}
+          </div>
+        </div>
+
+        <div className={classes.download}>
+          <button className={classes.btnDownload} onClick={saveFile}>Download File</button>
+        </div>
       </div>
     </div>
   );

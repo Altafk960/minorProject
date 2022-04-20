@@ -11,18 +11,24 @@ const NavBar = () => {
     <>
       <div className={classes.mainNavigation}>
         <div className={classes.appHeading}>
-          <h1>Heading</h1>
+          <h2>WeTransfer</h2>
         </div>
 
         <div className={classes.links}>
+
+        {
+            isLoggedIn && (<Link className={classes.linkContent} to="/home">Home</Link>)
+          }
           <Link className={classes.linkContent} to="/myUploads">
-            My uploads
+            My Uploads
           </Link>
           {!isLoggedIn && (
             <Link className={classes.linkContent} to="/login">
               Login
             </Link>
           )}
+
+        
         </div>
       </div>
     </>

@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import  { loginActions } from "./store/store";
 import { useDispatch } from "react-redux";
+import NavBar from './NavBar';
+// import bgSvg from "../graphic3.svg"
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -37,10 +39,11 @@ const Login = () => {
     setPasswordFocus(false);
   };
 
-  let activeEmailClassName = "";
+  let activeEmailClassName = "emailText";
   let activePasswordClassName = "";
+  // bro ye design kharaab kar rha h 
   if (emailInput.length > 0 || emailFocus) {
-    activeEmailClassName = "active";
+    activeEmailClassName = "active"; 
   }
 
   if (password.length > 0 || passwordFocus) {
@@ -71,36 +74,46 @@ const Login = () => {
   };
 
   return (
-    <div className={classes.loginForm}>
-      <form onSubmit={submitHandler}>
-        <div className={` ${classes.formControl}`}>
-          <label className={classes[activeEmailClassName]}>Email</label>
-          <input
-            type="email"
-            name="email"
-            onChange={emailInputHandler}
-            onFocus={emailFocusHandler}
-            onBlur={emailBlurHandler}
-          ></input>
-        </div>
+    <div className={classes.bgImg}>
+      <NavBar></NavBar>
+      <div className={classes.bgSvg}>
+      <div className={classes.loginForm}>
+        <form onSubmit={submitHandler}>
+          <div className={classes.loginHead}>Login to account</div>
+          <div className={classes.loginSubHead}>Access to the more secure distributed cloud storage system.</div>
+          <div className={` ${classes.formControl}`}>
+            <label className={classes.emailText}>Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your E-mail Address"
+              onChange={emailInputHandler}
+              onFocus={emailFocusHandler}
+              onBlur={emailBlurHandler}
+              className={classes.inputEmail}
+            ></input>
+          </div>
 
-        <div className={classes.formControl}>
-          <label className={classes[activePasswordClassName]}>Password</label>
-          <input
-            type="password"
-            name="password"
-            onChange={passwordInputHandler}
-            onFocus={passwordFocusHandler}
-            onBlur={passwordBlurHandler}
-          ></input>
-        </div>
+          <div className={classes.formControl}>
+            <label className={classes.emailText}>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your Password"
+              onChange={passwordInputHandler}
+              onFocus={passwordFocusHandler}
+              onBlur={passwordBlurHandler}
+            ></input>
+          </div>
 
-        <button type="submit">Login</button>
-        <p>
-          Doesn't have an account
-          <Link to="/signup">Signup here</Link>
-        </p>
-      </form>
+          <button className={classes.btnSubmit} type="submit">Login</button>
+          <p className={classes.signUp}>
+            Doesn't have an account
+            <Link className={classes.signBtn} to="/signup">SignUp here</Link>
+          </p>
+        </form>
+      </div>
+      </div>
     </div>
   );
 };

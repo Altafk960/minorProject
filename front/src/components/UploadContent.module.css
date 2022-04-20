@@ -1,8 +1,16 @@
+.bgImg{
+    background-color:#152733;
+    background-size: cover;
+    /* background-position: center; */
+    background-repeat: no-repeat;
+    height: 100vh;
+    
+}
 .contentCard{
-    width:80%;
-    margin:2rem auto;
-    background-color:white;
-    padding:0.5rem;
+    width:95%;
+    margin:1rem auto;
+    background-color:#152733;
+    padding:1rem;
     border-radius:5px;
     border:1px solid purple;
     display: flex;
@@ -10,9 +18,10 @@
 }
 
 .userDetails{
-    font-size:1.2rem;
-    color:grey;
+    font-size:1.1rem;
+    color:cyan;
     font-weight:bold;
+    margin-top: 0.8vw;
 }
 
 .fileDetails{
@@ -21,6 +30,10 @@
 
 .fileDetails{
     flex:1;
+    margin: 1vw 2vw;
+}
+.fileName{
+    color: white;
 }
 
 .download{
@@ -28,5 +41,16 @@
     text-align: right;
     justify-content: center;
     align-items: center;
+    margin: auto 4vw;
+}
+
+.btnDownload{
+    padding: 0.8rem 2.5rem;
+    background-color: #0093FF;
+    border-radius: 0.8rem;
+    font-weight: 600;
+    color: white;
+    /* margin: 0 2rem; */
+    font-size: 1.4rem;
 }
 
